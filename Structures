@@ -1,0 +1,7 @@
+#include <stdio.h>
+
+typedef struct{}Monster;
+typedef struct{}Weapon;
+typedef struct{}Player;
+typedef struct{}Divine_Weapon;
+typedef struct{}Object;
