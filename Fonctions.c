@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #define TAILLE 7
 
-void init_admin(int tab[7][7]){
-/*fonction qui initialise le plateau de jeu de 7 x 7 (pas le droit d'être sur la première ligne / colonne et dernière 
-ligne / colonne) en placant aléatoirement les monstres (avec un type aléatoire : 1 -> basilics ; 2 -> zombies ;
-3 -> trolls ; 4 -> harpies), les totems (5), les coffres au trésors (6) et le portail de téléportation (7)*/
+void init_admin(int tab[TAILLE][TAILLE]){
+/*fonction qui initialise le plateau de jeu de 7 x 7 (pas le droit d'être sur la première ligne / colonne et dernière ligne / colonne) en placant aléatoirement les monstres (avec un type aléatoire : 
+1 -> basilics ; 2 -> zombies ; 3 -> trolls ; 4 -> harpies), les totems (5), les coffres au trésors (6), les 4 armes antiques (7, 8, 9, 10) et le portail de téléportation (11)*/
+	//changer les num pour la procgaine fois
 	if(tab == NULL){
 		printf("Tableau de départ = NULL(init)");
 		return;
