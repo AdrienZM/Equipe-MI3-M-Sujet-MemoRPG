@@ -8,7 +8,8 @@
 
 int main(){
 	srand(time(NULL));
-	int plateau_admin[TAILLE][TAILLE], plateau_joueur[TAILLE][TAILLE];
+	int plateau_admin[TAILLE][TAILLE];
+	Case plateau_joueur[TAILLE][TAILLE];
 	printf("----------Plateau Admin----------");
 	init_admin(plateau_admin);
 	afficher_admin(plateau_admin);
