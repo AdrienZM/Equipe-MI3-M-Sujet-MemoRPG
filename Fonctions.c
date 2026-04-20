@@ -111,8 +111,8 @@ void afficher_revele(Case tab[TAILLE][TAILLE]){
 		printf("Tableau de départ = NULL(affiche_revele)");
 		return;
 	}
-	for(int i=0;i<taille;i++){
-		for(int j=0;j<taille;j++){
+	for(int i=0;i<TAILLE;i++){
+		for(int j=0;j<TAILLE;j++){
 			if(tab[i][j].correspond=='0'){
 				printf("\033[37m%s\033[0m",tab[i][j]);}
 			else if(tab[i][j].correspond=='1'){
