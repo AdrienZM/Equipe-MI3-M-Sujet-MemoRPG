@@ -3,11 +3,10 @@
 #define TAILLE 7
 
 void init_admin(int tab[TAILLE][TAILLE]){
-/*fonction qui initialise le plateau de jeu de 7 x 7 (pas le droit d'être sur la première ligne / colonne et dernière ligne / colonne) en placant aléatoirement les monstres (avec un type aléatoire : 
-1 -> basilics ; 2 -> zombies ; 3 -> trolls ; 4 -> harpies), les totems (5), les coffres au trésors (6), les 4 armes antiques (7, 8, 9, 10) et le portail de téléportation (11)*/
-	//changer les num pour la procgaine fois
+/*fonction qui initialise le plateau de jeu de 7 x 7 (pas le droit d'être sur la 1ere ligne, 1ere colonne et dernière ligne et dernière colonne) en placant aléatoirement les monstres (avec un type aléatoire : 
+5 -> basilics ; 6 -> zombies ; 7 -> trolls ; 8 -> harpies), les totems (9), les coffres au trésors (10), le portail de téléportation (11) et les 4 armes antiques (12, 13, 14, 15)*/
 	if(tab == NULL){
-		printf("Tableau de départ = NULL(init)");
+		printf("Tableau de départ = NULL(init_admin)");
 		return;
 	}
 	for(int i=0;i<TAILLE;i++){
@@ -21,12 +20,12 @@ void init_admin(int tab[TAILLE][TAILLE]){
 		tab[i][0] = -1;
 		tab[i][6] = -1; 
 	}	
-	int j = 0, k = 0, nb_monstres = 0, nb_tresors = 0, nb_totems = 0;
+	int j = 0, k = 0, nb_monstres = 0, nb_tresors = 0, nb_totems = 0, nb_arme_antique = 0;
 	while(nb_monstres < 16){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
 		if(tab[j][k] == 0){
-			tab[j][k] = rand() % 4 + 1;
+			tab[j][k] = rand() % 4 + 5;
 			nb_monstres++;
 		}
 	}
@@ -34,7 +33,7 @@ void init_admin(int tab[TAILLE][TAILLE]){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
 		if(tab[j][k] == 0){
-			tab[j][k] = 5;
+			tab[j][k] = 9;
 			nb_totems++;
 		}
 	}
@@ -42,7 +41,7 @@ void init_admin(int tab[TAILLE][TAILLE]){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
 		if(tab[j][k] == 0){
-			tab[j][k] = 6;
+			tab[j][k] = 10;
 			nb_tresors++;
 		}
 	}
@@ -50,7 +49,7 @@ void init_admin(int tab[TAILLE][TAILLE]){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
 		if(tab[j][k] == 0){
-			tab[j][k] = 7;
+			tab[j][k] = 12 + nb_arme_antique;
 			nb_arme_antique++;
 		}
 	}
@@ -64,7 +63,7 @@ void init_admin(int tab[TAILLE][TAILLE]){
 
 void afficher_admin(int tab[7][7]){
 	if(tab == NULL){
-		printf("Tableau de départ = NULL(affiche)");
+		printf("Tableau de départ = NULL(affiche_admin)");
 		return;
 	}
 	for(int i=0;i<7;i++){
@@ -76,6 +75,10 @@ void afficher_admin(int tab[7][7]){
 }
 
 void init_revele(Case plateau[][TAILLE]){
+	if(plateau == NULL){
+		printf("Tableau de départ = NULL(init_revele)");
+		return;
+	}
 	for(int i=0;i<TAILLE;i++){
 		for(int j=0;j<TAILLE;j++){
 			plateau[i][j].contenu="[ ]";
@@ -104,17 +107,21 @@ void init_revele(Case plateau[][TAILLE]){
 	}
 }
 void afficher_revele(Case tab[][TAILLE], int taille){
+	if(plateau == NULL){
+		printf("Tableau de départ = NULL(affiche_revele)");
+		return;
+	}
 	for(int i=0;i<taille;i++){
 		for(int j=0;j<taille;j++){
 			if(tab[i][j].correspond=='0'){
 				printf("\033[37m%s\033[0m",tab[i][j]);}
-			if(tab[i][j].correspond=='1'){
+			else if(tab[i][j].correspond=='1'){
 				printf("\033[31m%s\033[0m",tab[i][j]);}
-			if(tab[i][j].correspond=='2'){
+			else if(tab[i][j].correspond=='2'){
 				printf("\033[32m%s\033[0m",tab[i][j]);}
-			if(tab[i][j].correspond=='3'){
+			else if(tab[i][j].correspond=='3'){
 				printf("\033[33m%s\033[0m",tab[i][j]);}
-			if(tab[i][j].correspond=='4'){
+			else if(tab[i][j].correspond=='4'){
 				printf("\033[34m%s\033[0m",tab[i][j]);}
 		}
 		printf("\n");
