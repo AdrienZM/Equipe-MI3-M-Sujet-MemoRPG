@@ -7,6 +7,7 @@
 #define TAILLE 7
 
 int main(){
+	srand(time(NULL));
 	int plateau_admin[TAILLE][TAILLE], plateau_joueur[TAILLE][TAILLE];
 	printf("----------Plateau Admin----------");
 	init_admin(plateau_admin);
