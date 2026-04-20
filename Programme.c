@@ -4,10 +4,15 @@
 #include "functions.h"
 #include "structure.h"
 
+#define TAILLE 7
+
 int main(){
-	int plateau_admin[7][7], plateau_joueur[7][7];
-	init(plateau_admin);
-	afficher(plateau_admin);
-	
+	int plateau_admin[TAILLE][TAILLE], plateau_joueur[TAILLE][TAILLE];
+	printf("----------Plateau Admin----------");
+	init_admin(plateau_admin);
+	afficher_admin(plateau_admin);
+	printf("----------Plateau Révélé----------");
+	init_revele(plateau_joueur);
+	afficher_revele(plateau_joueur);
 	return 0;
 }
