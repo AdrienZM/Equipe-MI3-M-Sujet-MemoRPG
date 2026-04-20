@@ -61,20 +61,20 @@ void init_admin(int tab[TAILLE][TAILLE]){
 	}
 }
 
-void afficher_admin(int tab[7][7]){
+void afficher_admin(int tab[TAILLE][TAILLE]){
 	if(tab == NULL){
 		printf("Tableau de départ = NULL(affiche_admin)");
 		return;
 	}
-	for(int i=0;i<7;i++){
-		for(int j=0;j<7;j++){
+	for(int i=0;i<TAILLE;i++){
+		for(int j=0;j<TAILLE;j++){
 			printf("%d ", tab[i][j]);
 		}
 		printf("\n");
 	}
 }
 
-void init_revele(Case plateau[][TAILLE]){
+void init_revele(Case plateau[TAILLE][TAILLE]){
 	if(plateau == NULL){
 		printf("Tableau de départ = NULL(init_revele)");
 		return;
@@ -106,7 +106,7 @@ void init_revele(Case plateau[][TAILLE]){
 		}
 	}
 }
-void afficher_revele(Case tab[][TAILLE], int taille){
+void afficher_revele(Case tab[TAILLE][TAILLE]){
 	if(plateau == NULL){
 		printf("Tableau de départ = NULL(affiche_revele)");
 		return;
