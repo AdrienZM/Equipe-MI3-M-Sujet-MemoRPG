@@ -15,6 +15,9 @@ void init(Case plateau[TAILLE][TAILLE], int nb_joueurs){
 		for(int j=0;j<TAILLE;j++){
 			plateau[i][j].correspond = 0;
             plateau[i][j].revele = 0;
+			plateau[i][j].contenu = "[ ]";
+			if(i==0 || i==TAILLE-1 || j==0 || j==TAILLE-1)
+				plateau[i][j].contenu = "   ";
 		}
 	}
 	for(int i=0;i<TAILLE;i++){
@@ -23,37 +26,40 @@ void init(Case plateau[TAILLE][TAILLE], int nb_joueurs){
 		plateau[i][0].correspond = -1;
 		plateau[i][6].correspond = -1; 
 	}	
-	int j = 0, k = 0, nb_monstres = 0, nb_tresors = 0, nb_totems = 0, nb_arme_antique = 0;
-	while(nb_monstres < 16){
+	int j = 0, k = 0, n = 0;
+	while(n < 16){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
 		if(plateau[j][k].correspond == 0){
 			plateau[j][k].correspond = rand() % 4 + 5;
-			nb_monstres++;
+			n++;
 		}
 	}
-	while(nb_totems < 2){
+	n = 0;
+	while(n < 2){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
 		if(plateau[j][k].correspond == 0){
 			plateau[j][k].correspond = 9;
-			nb_totems++;
+			n++;
 		}
 	}
-	while(nb_tresors < 2){
+	n = 0;
+	while(n < 2){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
 		if(plateau[j][k].correspond == 0){
 			plateau[j][k].correspond = 10;
-			nb_tresors++;
+			n++;
 		}
 	}
-	while(nb_arme_antique < 4){
+	n = 0;
+	while(n < 4){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
 		if(plateau[j][k].correspond == 0){
-			plateau[j][k].correspond = 12 + nb_arme_antique;
-			nb_arme_antique++;
+			plateau[j][k].correspond = 12 + n;
+			n++;
 		}
 	}
 	for(int i=1;i<TAILLE-1;i++){
@@ -63,35 +69,10 @@ void init(Case plateau[TAILLE][TAILLE], int nb_joueurs){
 		}
     }
     //initialisation pour l'affichage et pour les joueurs
-    int c = 0;
-	for(int i=0;i<TAILLE;i++){
-		for(int j=0;j<TAILLE;j++){
-			plateau[i][j].contenu = "[ ]";
-			if(i==0 || i==TAILLE-1 || j==0 || j==TAILLE-1){
-				plateau[i][j].contenu = "   ";
-			}
-			if(i==0 && j==TAILLE-3 && c < nb_joueurs){
-				plateau[i][j].contenu = "[ ]";
-				plateau[i][j].correspond = 1;
-                c++;
-			}	
-			else if(i==2 && j==0 && c < nb_joueurs){
-				plateau[i][j].contenu = "[ ]";
-				plateau[i][j].correspond = 2;
-                c++;
-			}
-			else if(i==TAILLE-3 && j==TAILLE-1 && c < nb_joueurs){
-				plateau[i][j].contenu = "[ ]";
-				plateau[i][j].correspond = 3;
-                c++;
-			}
-			else if(i==TAILLE-1 && j==2 && c < nb_joueurs){
-				plateau[i][j].contenu = "[ ]";
-				plateau[i][j].correspond = 4;
-                c++;
-			}
-		}
-	}
+    if(nb_joueurs >= 1) plateau[0][4].correspond = 1;
+    if(nb_joueurs >= 2) plateau[2][0].correspond = 2;
+    if(nb_joueurs >= 3) plateau[6][2].correspond = 3;
+    if(nb_joueurs >= 4) plateau[4][6].correspond = 4;
 }
 
 void afficher(Case plateau[TAILLE][TAILLE]){
@@ -147,13 +128,14 @@ void init_joueur(Joueur* j){
 	j->coffre = 0;
 }
 
-void tour(Joueur j, Case plateau[TAILLE][TAILLE]){
+void tour(Joueur *j, Case plateau[TAILLE][TAILLE]){
+    printf("\nC'est au tour de %s !\n", j->nom);
     //choix de l'arme
     do{printf("Choisir une arme : Bouclier (1) ; Hache (2) ; Torche (3) ; Arc(4)\n");
-       scanf("%d", &j.arme);
-       if(j.arme < 1 || j.arme > 4)
+       scanf("%d", &j->arme);
+       if(j->arme < 1 || j->arme > 4)
            printf("Mauvaise saisie. Réessayer.\n");
-    }while(j.arme < 1 || j.arme > 4);
+    }while(j->arme < 1 || j->arme > 4);
 
     //choix de la case
     char case_choisie;
@@ -165,57 +147,31 @@ void tour(Joueur j, Case plateau[TAILLE][TAILLE]){
 
     //déplacement à faire
     if(case_choisie == 'h'){
-        if(j.pos.x + 1 > 0){
+        if(j->pos.x + 1 > 0){
             
         }
         else
             printf("Déplacement impossible : sortie du plateau.");
     }
     else if(case_choisie == 'b'){
-        if(j.pos.x - 1 < 6){
+        if(j->pos.x - 1 < 6){
             
         }
         else
             printf("Déplacement impossible : sortie du plateau.");
     }
     if(case_choisie == 'g'){
-        if(j.pos.y - 1 > 0){
+        if(j->pos.y - 1 > 0){
             
         }
         else
             printf("Déplacement impossible : sortie du plateau.");
     }
     if(case_choisie == 'd'){
-        if(j.pos.y + 1 < 6){
+        if(j->pos.y + 1 < 6){
             
         }
         else
             printf("Déplacement impossible : sortie du plateau.");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
