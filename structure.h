@@ -11,18 +11,8 @@ typedef struct{
 }Monstre;
 
 typedef struct{
-	int type_arme;
-}Arme;
-
-typedef struct{
-	int type_objet;
-}Objet;
-
-typedef struct{
-	Coordonnees pos;
-	Arme arme;
-	int arme_antique, coffre;
-	Objet objet;
+	Coordonnees pos; 
+	int arme, arme_antique, coffre;
 	char nom[50];
 }Joueur;
 
