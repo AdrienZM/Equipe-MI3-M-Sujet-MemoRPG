@@ -4,134 +4,130 @@
 
 #define TAILLE 7
 
-void init_admin(int tab[TAILLE][TAILLE]){
-/*fonction qui initialise le plateau de jeu de 7 x 7 (pas le droit d'être sur la 1ere ligne, 1ere colonne et dernière ligne et dernière colonne) en placant aléatoirement les monstres (avec un type aléatoire : 
-5 -> basilics ; 6 -> zombies ; 7 -> trolls ; 8 -> harpies), les totems (9), les coffres au trésors (10), le portail de téléportation (11) et les 4 armes antiques (12, 13, 14, 15)*/
-	if(tab == NULL){
-		printf("Tableau de départ = NULL(init_admin)");
+void init(Case plateau[TAILLE][TAILLE], int nb_joueurs){
+    /*fonction qui initialise le plateau de jeu de 7 x 7 (pas le droit d'être sur la 1ere ligne, 1ere colonne et dernière ligne et dernière colonne) en placant aléatoirement les monstres (avec un type aléatoire : 5 -> basilics ; 6 -> zombies ; 7 -> trolls ; 8 -> harpies), les totems (9), les coffres au trésors (10), le portail de téléportation (11) et les 4 armes antiques (12, 13, 14, 15)*/
+    //initialisation des monstres et objets
+	if(plateau == NULL){
+		printf("Tableau de départ = NULL(init)");
 		return;
 	}
-	for(int i=0;i<TAILLE;i++){
+    for(int i=0;i<TAILLE;i++){
 		for(int j=0;j<TAILLE;j++){
-			tab[i][j] = 0;
+			plateau[i][j].correspond = 0;
+            plateau[i][j].revele = 0;
 		}
 	}
 	for(int i=0;i<TAILLE;i++){
-		tab[0][i] = -1;
-		tab[6][i] = -1;
-		tab[i][0] = -1;
-		tab[i][6] = -1; 
+		plateau[0][i].correspond = -1;
+		plateau[6][i].correspond = -1;
+		plateau[i][0].correspond = -1;
+		plateau[i][6].correspond = -1; 
 	}	
 	int j = 0, k = 0, nb_monstres = 0, nb_tresors = 0, nb_totems = 0, nb_arme_antique = 0;
 	while(nb_monstres < 16){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
-		if(tab[j][k] == 0){
-			tab[j][k] = rand() % 4 + 5;
+		if(plateau[j][k].correspond == 0){
+			plateau[j][k].correspond = rand() % 4 + 5;
 			nb_monstres++;
 		}
 	}
 	while(nb_totems < 2){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
-		if(tab[j][k] == 0){
-			tab[j][k] = 9;
+		if(plateau[j][k].correspond == 0){
+			plateau[j][k].correspond = 9;
 			nb_totems++;
 		}
 	}
 	while(nb_tresors < 2){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
-		if(tab[j][k] == 0){
-			tab[j][k] = 10;
+		if(plateau[j][k].correspond == 0){
+			plateau[j][k].correspond = 10;
 			nb_tresors++;
 		}
 	}
 	while(nb_arme_antique < 4){
 		j = rand()%5 + 1;
 		k = rand()%5 + 1;
-		if(tab[j][k] == 0){
-			tab[j][k] = 12 + nb_arme_antique;
+		if(plateau[j][k].correspond == 0){
+			plateau[j][k].correspond = 12 + nb_arme_antique;
 			nb_arme_antique++;
 		}
 	}
 	for(int i=1;i<TAILLE-1;i++){
 		for(int j=1;j<TAILLE-1;j++){
-			if(tab[i][j] == 0)
-				tab[i][j] = 11;
+			if(plateau[i][j].correspond == 0)
+				plateau[i][j].correspond = 11;
 		}
-	}
-}
-
-void afficher_admin(int tab[TAILLE][TAILLE]){
-	if(tab == NULL){
-		printf("Tableau de départ = NULL(affiche_admin)");
-		return;
-	}
-	for(int i=0;i<TAILLE;i++){
-		for(int j=0;j<TAILLE;j++){
-			printf("%d ", tab[i][j]);
-		}
-		printf("\n");
-	}
-}
-
-void init_revele(Case plateau[TAILLE][TAILLE], int nb_joueurs){
-	if(plateau == NULL){
-		printf("Tableau de départ = NULL(init_revele)");
-		return;
-	}
+    }
+    //initialisation pour l'affichage et pour les joueurs
     int c = 0;
 	for(int i=0;i<TAILLE;i++){
 		for(int j=0;j<TAILLE;j++){
-			plateau[i][j].contenu="[ ]";
-			plateau[i][j].correspond = '0';
+			plateau[i][j].contenu = "[ ]";
 			if(i==0 || i==TAILLE-1 || j==0 || j==TAILLE-1){
 				plateau[i][j].contenu = "   ";
 			}
 			if(i==0 && j==TAILLE-3 && c < nb_joueurs){
 				plateau[i][j].contenu = "[ ]";
-				plateau[i][j].correspond = '1';
+				plateau[i][j].correspond = 1;
                 c++;
 			}	
 			else if(i==2 && j==0 && c < nb_joueurs){
 				plateau[i][j].contenu = "[ ]";
-				plateau[i][j].correspond = '2';
+				plateau[i][j].correspond = 2;
                 c++;
 			}
 			else if(i==TAILLE-3 && j==TAILLE-1 && c < nb_joueurs){
 				plateau[i][j].contenu = "[ ]";
-				plateau[i][j].correspond = '3';
+				plateau[i][j].correspond = 3;
                 c++;
 			}
 			else if(i==TAILLE-1 && j==2 && c < nb_joueurs){
 				plateau[i][j].contenu = "[ ]";
-				plateau[i][j].correspond = '4';
+				plateau[i][j].correspond = 4;
                 c++;
 			}
-			
 		}
 	}
 }
-void afficher_revele(Case tab[TAILLE][TAILLE]){
-	if(tab == NULL){
+
+void afficher(Case plateau[TAILLE][TAILLE]){
+	if(plateau == NULL){
 		printf("Tableau de départ = NULL(affiche_revele)");
 		return;
 	}
+    printf("Plateau Admin \n");
+    for(int i=0;i<TAILLE;i++){
+		for(int j=0;j<TAILLE;j++){
+            printf("%d ", plateau[i][j].correspond);
+        }
+        printf("\n");
+    }
+    printf("Plateau Joueur\n");
 	for(int i=0;i<TAILLE;i++){
 		for(int j=0;j<TAILLE;j++){
-			if(tab[i][j].correspond =='0'){
-				printf("\033[37m%s\033[0m",tab[i][j].contenu);}
-			else if(tab[i][j].correspond =='1'){
-				printf("\033[31m%s\033[0m",tab[i][j].contenu);}
-			else if(tab[i][j].correspond =='2'){
-				printf("\033[32m%s\033[0m",tab[i][j].contenu);}
-			else if(tab[i][j].correspond =='3'){
-				printf("\033[33m%s\033[0m",tab[i][j].contenu);}
-			else if(tab[i][j].correspond =='4'){
-				printf("\033[34m%s\033[0m",tab[i][j].contenu);}
-		}
-		printf("\n");
+			if (plateau[i][j].correspond >= 1 && plateau[i][j].correspond <= 4) {
+                switch(plateau[i][j].correspond) {
+                    case 1: printf("\033[1;31m[1]\033[0m"); break; 
+                    case 2: printf("\033[1;32m[2]\033[0m"); break; 
+                    case 3: printf("\033[1;33m[3]\033[0m"); break; 
+                    case 4: printf("\033[1;34m[4]\033[0m"); break; 
+                }
+            } 
+            else if (plateau[i][j].revele == 1) {
+                printf("\033[0;36m[X]\033[0m"); 
+            }
+            else if (plateau[i][j].contenu[0] == ' ') {
+                printf("   ");
+            }
+            else {
+                printf("\033[0;37m[ ]\033[0m");
+            }
+        }
+        printf("\n");
 	}
 }
 
@@ -141,6 +137,7 @@ int est_gagnant(Joueur j){
 	else
 		return 0;
 }
+
 void init_joueur(Joueur* j){
 	printf("Saisir le nom du joueur : ");
 	scanf("%49s", j->nom);
@@ -150,24 +147,52 @@ void init_joueur(Joueur* j){
 	j->coffre = 0;
 }
 
+void tour(Joueur j, Case plateau[TAILLE][TAILLE]){
+    //choix de l'arme
+    do{printf("Choisir une arme : Bouclier (1) ; Hache (2) ; Torche (3) ; Arc(4)\n");
+       scanf("%d", &j.arme);
+       if(j.arme < 1 || j.arme > 4)
+           printf("Mauvaise saisie. Réessayer.\n");
+    }while(j.arme < 1 || j.arme > 4);
 
+    //choix de la case
+    char case_choisie;
+    do{printf("Choisir la case où aller : 'h' --> haut ; 'g' --> gauche ; 'b' --> bas ; 'd' --> droite\n");
+       scanf("%c", &case_choisie);
+       if(case_choisie != 'h' && case_choisie != 'g' && case_choisie != 'b' && case_choisie != 'd')
+           printf("Mauvaise saisie. Réessayer.\n");
+    }while(case_choisie != 'h' && case_choisie != 'g' && case_choisie != 'b' && case_choisie != 'd');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //déplacement à faire
+    if(case_choisie == 'h'){
+        if(j.pos.x + 1 > 0){
+            
+        }
+        else
+            printf("Déplacement impossible : sortie du plateau.");
+    }
+    else if(case_choisie == 'b'){
+        if(j.pos.x - 1 < 6){
+            
+        }
+        else
+            printf("Déplacement impossible : sortie du plateau.");
+    }
+    if(case_choisie == 'g'){
+        if(j.pos.y - 1 > 0){
+            
+        }
+        else
+            printf("Déplacement impossible : sortie du plateau.");
+    }
+    if(case_choisie == 'd'){
+        if(j.pos.y + 1 < 6){
+            
+        }
+        else
+            printf("Déplacement impossible : sortie du plateau.");
+    }
+}
 
 
 
