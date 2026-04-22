@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "structure.h"
+
 #define TAILLE 7
 
 void init_admin(int tab[TAILLE][TAILLE]){
@@ -127,3 +129,63 @@ void afficher_revele(Case tab[TAILLE][TAILLE]){
 		printf("\n");
 	}
 }
+
+int est_gagnant(Joueur j){
+	if(j.coffre >= 1 && j.arme_antique == 1)
+		return 1;
+	else
+		return 0;
+}
+void init_joueur(Joueur* j){
+	printf("Saisir le nom du joueur : ");
+	scanf("49s", j->nom);
+	j->arme = 0;
+	j->arme_antique = 0;
+	j->coffre = 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
