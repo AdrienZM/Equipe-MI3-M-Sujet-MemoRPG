@@ -4,8 +4,9 @@
 
 #define TAILLE 7
 
-void init_admin(int plateau[TAILLE][TAILLE]);
-void afficher_admin(int plateau[TAILLE][TAILLE]);
-void init_revele(char plateau_joueur[TAILLE][TAILLE]);
-void afficher_revele(char plateau_joueur[TAILLE][TAILLE]);
+void init(Case plateau[TAILLE][TAILLE], int nb_joueurs);
+void afficher(Case plateau[TAILLE][TAILLE]);
+void init_joueur(Joueur* j);
+int est_gagnant(Joueur j);
+void tour(Joueur* j, Case plateau[TAILLE][TAILLE]);
 #endif
