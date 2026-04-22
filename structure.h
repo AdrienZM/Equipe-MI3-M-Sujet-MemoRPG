@@ -21,7 +21,7 @@ typedef struct{
 typedef struct{
 	Coordonnees pos;
 	Arme arme;
-	int arme_antique;
+	int arme_antique, coffre;
 	Objet objet;
 	char nom[50];
 }Joueur;
@@ -31,6 +31,6 @@ typedef struct{
 
 	char* contenu;
 	char correspond;//0: caché; 1,2,3,4: les joueurs;
-	int révélé;
+	int revele;
 }Case;
 #endif
