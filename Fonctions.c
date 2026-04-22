@@ -76,11 +76,12 @@ void afficher_admin(int tab[TAILLE][TAILLE]){
 	}
 }
 
-void init_revele(Case plateau[TAILLE][TAILLE]){
+void init_revele(Case plateau[TAILLE][TAILLE], int nb_joueurs){
 	if(plateau == NULL){
 		printf("Tableau de départ = NULL(init_revele)");
 		return;
 	}
+    int c = 0;
 	for(int i=0;i<TAILLE;i++){
 		for(int j=0;j<TAILLE;j++){
 			plateau[i][j].contenu="[ ]";
@@ -88,43 +89,47 @@ void init_revele(Case plateau[TAILLE][TAILLE]){
 			if(i==0 || i==TAILLE-1 || j==0 || j==TAILLE-1){
 				plateau[i][j].contenu = "   ";
 			}
-			if(i==0 && j==TAILLE-3){
+			if(i==0 && j==TAILLE-3 && c < nb_joueurs){
 				plateau[i][j].contenu = "[ ]";
 				plateau[i][j].correspond = '1';
+                c++;
 			}	
-			else if(i==2 && j==0){
+			else if(i==2 && j==0 && c < nb_joueurs){
 				plateau[i][j].contenu = "[ ]";
 				plateau[i][j].correspond = '2';
+                c++;
 			}
-			else if(i==TAILLE-3 && j==TAILLE-1){
+			else if(i==TAILLE-3 && j==TAILLE-1 && c < nb_joueurs){
 				plateau[i][j].contenu = "[ ]";
 				plateau[i][j].correspond = '3';
+                c++;
 			}
-			else if(i==TAILLE-1 && j==2){
+			else if(i==TAILLE-1 && j==2 && c < nb_joueurs){
 				plateau[i][j].contenu = "[ ]";
 				plateau[i][j].correspond = '4';
+                c++;
 			}
 			
 		}
 	}
 }
 void afficher_revele(Case tab[TAILLE][TAILLE]){
-	if(plateau == NULL){
+	if(tab == NULL){
 		printf("Tableau de départ = NULL(affiche_revele)");
 		return;
 	}
 	for(int i=0;i<TAILLE;i++){
 		for(int j=0;j<TAILLE;j++){
-			if(tab[i][j].correspond=='0'){
-				printf("\033[37m%s\033[0m",tab[i][j]);}
-			else if(tab[i][j].correspond=='1'){
-				printf("\033[31m%s\033[0m",tab[i][j]);}
-			else if(tab[i][j].correspond=='2'){
-				printf("\033[32m%s\033[0m",tab[i][j]);}
-			else if(tab[i][j].correspond=='3'){
-				printf("\033[33m%s\033[0m",tab[i][j]);}
-			else if(tab[i][j].correspond=='4'){
-				printf("\033[34m%s\033[0m",tab[i][j]);}
+			if(tab[i][j].correspond =='0'){
+				printf("\033[37m%s\033[0m",tab[i][j].contenu);}
+			else if(tab[i][j].correspond =='1'){
+				printf("\033[31m%s\033[0m",tab[i][j].contenu);}
+			else if(tab[i][j].correspond =='2'){
+				printf("\033[32m%s\033[0m",tab[i][j].contenu);}
+			else if(tab[i][j].correspond =='3'){
+				printf("\033[33m%s\033[0m",tab[i][j].contenu);}
+			else if(tab[i][j].correspond =='4'){
+				printf("\033[34m%s\033[0m",tab[i][j].contenu);}
 		}
 		printf("\n");
 	}
@@ -138,12 +143,12 @@ int est_gagnant(Joueur j){
 }
 void init_joueur(Joueur* j){
 	printf("Saisir le nom du joueur : ");
-	scanf("49s", j->nom);
+	scanf("%49s", j->nom);
+    printf("\n");
 	j->arme = 0;
 	j->arme_antique = 0;
 	j->coffre = 0;
 }
-
 
 
 
