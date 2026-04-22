@@ -31,18 +31,26 @@ int main(){
 		if(plateau_admin[0][4] == -1){
 			j.pos.x = 0;
 			j.pos.y = 4;
+			plateau_admin[0][4] == 1;
+			plateau_joueur[0][4].correspond == '1';
 		}
 		else if(plateau_admin[2][0] == -1){
 			j.pos.x = 2;
 			j.pos.y = 0;
+			plateau_admin[0][4] == 2;
+			plateau_joueur[0][4].correspond == '2';
 		}
 		else if(plateau_admin[6][2] == -1){
 			j.pos.x = 6;
 			j.pos.y = 2;
+			plateau_admin[0][4] == 3;
+			plateau_joueur[0][4].correspond == '3';
 		}
 		else{
 			j.pos.x = 4;
 			j.pos.y = 6;
+			plateau_admin[0][4] == 4;
+			plateau_joueur[0][4].correspond == '4';
 		}
 		joueurs[i] = j;
 	}
