@@ -7,7 +7,7 @@
 
 typedef struct{
     Coordonnees pos; 
-    int arme, arme_antique, coffre;
+    int arme, arme_antique, coffre, type;
     char nom[50];
 }Joueur;
 
