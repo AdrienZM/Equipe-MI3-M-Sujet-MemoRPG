@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "Fonctions.h"
 #include "structure.h"
 
 #define TAILLE 7
 
-int main(){
+int main() {
 	srand(time(NULL));
+    time_t debut = time(NULL);
 	Case plateau[TAILLE][TAILLE];
 	//Demande du nombre de joueurs puis initialisation du plateau de jeu
 	int nb_joueur;
@@ -56,6 +58,14 @@ int main(){
         gagnant = est_gagnant(joueurs[i]);
         i++;
     }
+
+    time_t fin = time(NULL);
+    double duree = difftime(fin, debut);
+    
+    //Sauvegarder les résultats dans un fichier texte
+    i--;
+    char* nom_du_gagnant = joueurs[i].nom;
+    sauvegarder(joueurs, nb_joueur, nom_du_gagnant);
     
     //On révèle toutes les cases puis on affiche le plateau
     for (int i = 1 ; i < TAILLE - 1 ; i++) {
@@ -64,6 +74,25 @@ int main(){
         }
     }
     afficher(plateau);
-    //Sauvegarder les résultats dans un fichier texte
+    int heure, min, sec = duree;
+    while (sec > 59) {
+        if (sec > 59) {
+            sec -= 60;
+            min++;
+        }
+        if (min > 59) {
+            min -= 60;
+            heure++;
+        }
+        sec -= 60;
+    }
+    if (heure == 0) {
+        if (min == 0)
+            printf("La partie a durée %d s", sec);
+        printf("La partie a durée %d min %d s", min, sec);
+    }
+    else if (min == 0)
+            printf("La partie a durée %d h %d s", heure, sec);
+    printf("La partie a durée %d h %d min %d s", heure, min, sec);
 	return 0;
 }
