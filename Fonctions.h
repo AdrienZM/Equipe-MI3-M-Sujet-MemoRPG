@@ -10,5 +10,6 @@ int est_gagnant(Joueur j);
 void init_joueur(Joueur* j);
 void tour(Joueur *j, Case plateau[TAILLE][TAILLE]);
 void retourner(Case plateau[TAILLE][TAILLE]);
+void sauvegarder(Joueur* joueur_partie, int nb_joueur, char* nom_gagnant);
 
 #endif
