@@ -16,4 +16,10 @@ typedef struct {
     int correspond, revele;
     /*joueurs (1, 2, 3, 4) ; basilics (5) ; zombies (6) ; trolls (7) ; harpies (8) ; totems (9) ; coffres au trésors (10) ; portail de téléportation (11) ; armes antiques (12, 13, 14, 15) ; revele = 0 si cachée, 1 si révélée*/
 } Case;
+
+typedef struct {
+    char nom[50];
+    int parties;
+    int victoires;
+} Statistique;
 #endif
