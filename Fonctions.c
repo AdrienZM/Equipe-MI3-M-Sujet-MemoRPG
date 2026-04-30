@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "structure.h"
 
 #define TAILLE 7
@@ -301,4 +302,56 @@ void retourner(Case plateau[TAILLE][TAILLE]) {
             plateau[i][j].revele = 0;
         }
     }
+}
+
+void sauvegarder(Joueur* joueurs_partie, int nb_joueurs, char* nom_gagnant) {
+    /*Fonction qui sauvegarde dans un fichier texte le nombre de victoires et de parties jouées de chaque joueurs. Elle stocke toutes les données des parties précédentes dans un tableau temporaire puis vérifie si le gagnant est un nouveau joueur ou non et lui ajoute un victoire*/
+    /*Faite par Gemini*/
+    FILE* f = fopen("Game_History.txt", "r");
+    Statistique historique[200]; //200 joueurs différents max
+    int total_historique = 0;
+
+    //on stocke toutes les données des parties précédentes dans un tableau temporaire (historique)
+    if (f != NULL) {
+        while (fscanf(f, "%s %d %d", historique[total_historique].nom, &historique[total_historique].parties, &historique[total_historique].victoires) != EOF) {
+            total_historique++;
+        }
+        fclose(f);
+    }
+
+    //mise à jour avec les joueurs de la partie actuelle
+    for (int i = 0; i < nb_joueurs; i++) {
+        //joueur gagnant déjà dans le fichier
+        int trouve = 0;
+        for (int j = 0; j < total_historique; j++) {
+            if (strcmp(joueurs_partie[i].nom, historique[j].nom) == 0) {
+                historique[j].parties++;
+                if (strcmp(joueurs_partie[i].nom, nom_gagnant) == 0) 
+                    historique[j].victoires++;
+                trouve = 1;
+                break;
+            }
+        }
+        
+        //nouveau joueur gagnant
+        if (trouve == 0 && total_historique < 200) {
+            strcpy(historique[total_historique].nom, joueurs_partie[i].nom);
+            historique[total_historique].parties = 1;
+            historique[total_historique].victoires = (strcmp(joueurs_partie[i].nom, nom_gagnant) == 0) ? 1 : 0;
+            total_historique++;
+        }
+    }
+
+    f = fopen("Game_History.txt", "w");
+    if (f == NULL) {
+        printf("Erreur lors de l'enregistrement du fichier !\n");
+        return;
+    }
+    
+    //réécriture du fichier
+    for (int i = 0; i < total_historique; i++) {
+        fprintf(f, "%s %d %d\n", historique[i].nom, historique[i].parties, historique[i].victoires);
+    }
+    fclose(f);
+    printf("\nHistorique mis à jour dans 'Game_History.txt'.\n");
 }
