@@ -95,6 +95,12 @@ void init(Case plateau[TAILLE][TAILLE], int nb_joueurs) {
         plateau[4][6].correspond = 4;
 }
 
+void afficher_joueurs(int nb_joueurs, Joueur *joueurs){
+	for(int i = 0 ; i < nb_joueurs ; i++){
+		printf("Joueur %d : %s \n", i+1, joueurs[i].nom);
+	}
+}
+
 void afficher(Case plateau[TAILLE][TAILLE]) {
     /*Cette fonction permet d'afficher le plateau en prenant en compte si la case à un joueur (pas encore fait : le joueur reste statique sur la case de départ) et si elle est révélée ou non (met différentes couleurs selon les cas)*/
     
@@ -111,7 +117,7 @@ void afficher(Case plateau[TAILLE][TAILLE]) {
         }
         printf("\n");
     }
-    
+	
     printf("----------Plateau----------\n");
     for (int i = 0 ; i < TAILLE ; i++) {
         for (int j = 0 ; j < TAILLE ; j++) {
