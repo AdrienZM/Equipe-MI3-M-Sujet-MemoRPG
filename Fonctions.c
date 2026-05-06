@@ -95,13 +95,7 @@ void init(Case plateau[TAILLE][TAILLE], int nb_joueurs) {
         plateau[4][6].correspond = 4;
 }
 
-void afficher_joueurs(int nb_joueurs, Joueur *joueurs){
-	for(int i = 0 ; i < nb_joueurs ; i++){
-		printf("Joueur %d : %s \n", i+1, joueurs[i].nom);
-	}
-}
-
-void afficher(Case plateau[TAILLE][TAILLE]) {
+void afficher(Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueurs) {
     /*Cette fonction permet d'afficher le plateau en prenant en compte si la case à un joueur (pas encore fait : le joueur reste statique sur la case de départ) et si elle est révélée ou non (met différentes couleurs selon les cas)*/
     
     if (plateau == NULL) {
@@ -118,6 +112,9 @@ void afficher(Case plateau[TAILLE][TAILLE]) {
         printf("\n");
     }
 	
+	for(int i = 0 ; i < nb_joueurs ; i++){
+		printf("Joueur %d : %s \n", i+1, joueurs[i].nom);
+	}
     printf("----------Plateau----------\n");
     for (int i = 0 ; i < TAILLE ; i++) {
         for (int j = 0 ; j < TAILLE ; j++) {
@@ -168,7 +165,7 @@ void init_joueur(Joueur* j){
 	j->coffre = 0;
 }
 
-void tour(Joueur *j, Case plateau[TAILLE][TAILLE]){
+void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueurs){
     /*Fonction qui fait le tour d'un joueur : affiche le plateau, demande l'arme à choisir, demande la case où aller et en fonction de la valeur de l'élément correspond de la case, vérifie et exécute les différentes options*/
 
     if (j == NULL || plateau == NULL) {
@@ -180,7 +177,7 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE]){
     int ligne, colonne, recommencer, teleportation = 0, x, y;
     Coordonnees depart = j->pos;
     printf("\nC'est au tour de %s !\n", j->nom);
-    afficher(plateau);
+    afficher(plateau, joueurs, nb_joueurs);
     
     do {
         recommencer = 0;
@@ -230,7 +227,7 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE]){
         else {
             //Révélation de la case
             plateau[j->pos.x][j->pos.y].revele = 1;
-            afficher(plateau);
+            afficher(plateau, joueurs, nb_joueurs);
             if (plateau[j->pos.x][j->pos.y].correspond <= 8 && plateau[j->pos.x][j->pos.y].correspond >= 5) { //Monstres
                 if (j->arme == plateau[j->pos.x][j->pos.y].correspond - 4) { //Bonne arme
                     printf("Bravo ! Vous avez battu le monstre ! Vous pouvez continuer votre chemin.\n");
