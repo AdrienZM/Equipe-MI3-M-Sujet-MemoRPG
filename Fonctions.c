@@ -115,7 +115,7 @@ void afficher(Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueurs) {
 	for(int i = 0 ; i < nb_joueurs ; i++){
 		printf("Joueur %d : %s \n", i+1, joueurs[i].nom);
 	}
-    printf("----------Plateau----------\n");
+    printf("\n----------Plateau----------\n");
     for (int i = 0 ; i < TAILLE ; i++) {
         for (int j = 0 ; j < TAILLE ; j++) {
             if (plateau[i][j].correspond >= 1 && plateau[i][j].correspond <= 4) {
@@ -176,9 +176,9 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
     char case_choisie;
     int ligne, colonne, recommencer, teleportation = 0, x, y;
     Coordonnees depart = j->pos;
-    printf("\nC'est au tour de %s !\n", j->nom);
     afficher(plateau, joueurs, nb_joueurs);
-    
+    printf("\nC'est au tour de %s !\n", j->nom);
+	
     do {
         recommencer = 0;
         //Demande l'arme à choisir
@@ -230,18 +230,18 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
             afficher(plateau, joueurs, nb_joueurs);
             if (plateau[j->pos.x][j->pos.y].correspond <= 8 && plateau[j->pos.x][j->pos.y].correspond >= 5) { //Monstres
                 if (j->arme == plateau[j->pos.x][j->pos.y].correspond - 4) { //Bonne arme
-                    printf("Bravo ! Vous avez battu le monstre ! Vous pouvez continuer votre chemin.\n");
+                    printf("Bravo ! %s a battu le monstre ! Vous pouvez continuer votre chemin.\n", j->nom);
                     recommencer = 1;
                 }
                 else { //Mauvaise arme
-                    printf("Vous êtes mort ! Vous réapparaisser à votre position initiale.");
+                    printf("%s es mort ! Il réapparait à sa position initiale.", j->nom);
                     j->pos = depart;
                 }
             }
             else if (plateau[j->pos.x][j->pos.y].correspond == 9) { //Totem
-                printf("Vous avez découvert un Totem de Transmutation !\n");
+                printf("%s a découvert un Totem de Transmutation !\n", j->nom);
                 do {
-                    printf("Quelle case cachée voulez-vous échanger ? (ligne (1 à 5) colonne (1 à 5)\n");
+                    printf("Quelle case cachée veux-tu échanger ? (ligne (1 à 5) colonne (1 à 5)\n");
                     scanf("%d %d", &ligne, &colonne);
                     if (ligne < 1 || ligne > 5 || (colonne < 1) || colonne > 5)
                         printf("Mauvaise saisie : sortie du plateau.\n");
@@ -255,7 +255,7 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
                 j->pos = depart;
             }
             else if (plateau[j->pos.x][j->pos.y].correspond == 10) { //Coffre au Trésor
-                printf("Bravo ! Vous avez découvert un Coffre au Trésor !\n");
+                printf("Bravo ! %s a découvert un Coffre au Trésor !\n", j->nom);
                 j->coffre++;
                 recommencer = 1;
                 if (est_gagnant(*j) == 1) {
@@ -264,9 +264,9 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
                 }
             }        
             else if (plateau[j->pos.x][j->pos.y].correspond == 11) { //Portail de Téléportation
-                printf("Bravo ! Vous avez découvert un Portail de Téléportation !\n");
+                printf("Bravo ! %s a découvert un Portail de Téléportation !\n", j->nom);
                 do {
-                    printf("Sur quelle case cachée voulez-vous vous téléporter ? (ligne (1 à 5) colonne (1 à 5)\n");
+                    printf("Sur quelle case cachée veux-tu te téléporter ? (ligne (1 à 5) colonne (1 à 5)\n");
                     scanf("%d %d", &ligne, &colonne);
                     if (ligne < 1 || ligne > 5 || (colonne < 1) || colonne > 5)
                         printf("Mauvaise saisie : sortie du plateau.\n");
@@ -274,16 +274,16 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
                         printf("Case déjà révélée. Mauvaise saisie.\n");
                 } while (ligne < 1 || ligne > 5 || (colonne < 1) || colonne > 5 || plateau[ligne][colonne].revele == 1);
                 
-                printf("Vous vous téléporter sur la case %d %d !\n", ligne, colonne);
+                printf("%s se téléporter sur la case %d %d !\n", j->nom, ligne, colonne);
                 j->pos.x = ligne;
                 j->pos.y = colonne;
                 recommencer = 1;
                 teleportation = 1;
             }
             else if (plateau[j->pos.x][j->pos.y].correspond <= 15 && plateau[j->pos.x][j->pos.y].correspond >= 12) { //Arme Antique
-                printf("Bravo ! Vous avez découvert une Arme Antique !\n");
+                printf("Bravo ! %s a découvert une Arme Antique !\n", j->nom);
                 if (j->type == plateau[j->pos.x][j->pos.y].correspond - 11) {
-                    printf("Bravo ! Vous avez découvert votre Arme Antique !\n");
+                    printf("%s a découvert son Arme Antique !\n", j->nom);
                     j->arme_antique++;
                     if (est_gagnant(*j) == 1) {
                         printf("Bravo ! %s est gagnant !\n", j->nom);
@@ -291,7 +291,7 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
                     }
                 }
                 else
-                    printf("Dommage ! Vous n'avez pas découvert votre Arme Antique !\n");
+                    printf("Dommage ! %s n'a pas découvert son Arme Antique !\n", j->nom);
                 recommencer = 1;
             }
         }
