@@ -54,7 +54,7 @@ int main() {
         if (i >= nb_joueur)
             i = 0;
         retourner(plateau);
-        tour(&joueurs[i], plateau);
+        tour(&joueurs[i], plateau, joueurs, nb_joueur);
         gagnant = est_gagnant(joueurs[i]);
         i++;
     }
@@ -73,8 +73,8 @@ int main() {
             plateau[i][j].revele = 1;
         }
     }
-    afficher(plateau);
-    int heure, min, sec = duree;
+    afficher(plateau, joueurs, nb_joueur);
+    int heure = 0, min = 0, sec = duree;
     while (sec > 59) {
         if (sec > 59) {
             sec -= 60;
