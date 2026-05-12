@@ -623,3 +623,72 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
         }
     } while (recommencer == 1);
 }
+
+
+
+void afficher(Case plateau[TAILLE][TAILLE], Joueur *joueurs, Joueur *perso, int nb_joueurs) {
+
+    system("cls"); // Windows
+    // system("clear"); // Linux/Mac
+
+    printf("----------Plateau----------\n");
+
+    for (int i = 0 ; i < TAILLE ; i++) {
+
+        for (int j = 0 ; j < TAILLE ; j++) {
+
+            int joueur_present = 0;
+
+            // Vérifie si un joueur est sur la case
+            for (int k = 0 ; k < nb_joueurs ; k++) {
+
+                if (joueurs[k].pos.x == i && joueurs[k].pos.y == j) {
+
+                    joueur_present = 1;
+
+                    switch(k + 1) {
+
+                        case 1:
+                            printf("\033[1;31m[J1]\033[0m");
+                            break;
+
+                        case 2:
+                            printf("\033[1;32m[J2]\033[0m");
+                            break;
+
+                        case 3:
+                            printf("\033[1;33m[J3]\033[0m");
+                            break;
+
+                        case 4:
+                            printf("\033[1;34m[J4]\033[0m");
+                            break;
+                    }
+
+                    break;
+                }
+            }
+
+            // Si aucun joueur sur la case
+            if (!joueur_present) {
+
+                // Bordures
+                if (plateau[i][j].correspond == -1) {
+                    printf("    ");
+                }
+
+                // Case révélée
+                else if (plateau[i][j].revele == 1) {
+                    printf("\033[0;36m[%2d]\033[0m", plateau[i][j].correspond);
+                }
+
+                // Case cachée
+                else {
+                    printf("\033[0;37m[  ]\033[0m");
+                }
+            }
+        }
+
+        printf("\n");
+    }
+}
