@@ -70,10 +70,35 @@ int main() {
     //On révèle toutes les cases puis on affiche le plateau
     for (int i = 1 ; i < TAILLE - 1 ; i++) {
         for (int j = 1 ; j < TAILLE - 1 ; j++) {
-            plateau[i][j].revele = 1;
-        }
+    		plateau[i][j].revele = 1;
+    	}
     }
-    afficher(plateau, joueurs, nb_joueur);
+    
+    printf("\n----------Plateau----------\n");
+    for (int i = 0 ; i < TAILLE ; i++) {
+        for (int j = 0 ; j < TAILLE ; j++) {
+            if (plateau[i][j].correspond >= 1 && plateau[i][j].correspond <= 4) {
+                switch(plateau[i][j].correspond) {
+                    case 1: printf("\033[1;31m[%2d]\033[0m", plateau[i][j].correspond) ; break; 
+                    case 2: printf("\033[1;32m[%2d]\033[0m", plateau[i][j].correspond) ; break; 
+                    case 3: printf("\033[1;33m[%2d]\033[0m", plateau[i][j].correspond) ; break; 
+                    case 4: printf("\033[1;34m[%2d]\033[0m", plateau[i][j].correspond) ; break; 
+                }
+            } 
+            else if (plateau[i][j].revele == 1) {
+                printf("\033[0;36m[%2d]\033[0m", plateau[i][j].correspond); 
+            }
+            else if (plateau[i][j].contenu[0] == ' ') {
+                printf("    ");
+            }
+            else {
+                printf("\033[0;37m[  ]\033[0m");
+            }
+        }
+        printf("\n");
+    }
+    
+    //on affiche l'heure
     int heure = 0, min = 0, sec = duree;
     while (sec > 59) {
         if (sec > 59) {
@@ -84,15 +109,16 @@ int main() {
             min -= 60;
             heure++;
         }
-        sec -= 60;
     }
     if (heure == 0) {
         if (min == 0)
-            printf("La partie a durée %d s", sec);
-        printf("La partie a durée %d min %d s", min, sec);
+            printf("La partie a durée %d s\n", sec);
+        else 
+        	printf("La partie a durée %d min %d s\n", min, sec);
     }
     else if (min == 0)
-            printf("La partie a durée %d h %d s", heure, sec);
-    printf("La partie a durée %d h %d min %d s", heure, min, sec);
+            printf("La partie a durée %d h %d s\n", heure, sec);
+    else 
+    	printf("La partie a durée %d h %d min %d s\n", heure, min, sec);
 	return 0;
 }
