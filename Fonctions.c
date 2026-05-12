@@ -165,6 +165,24 @@ void init_joueur(Joueur* j){
 	j->coffre = 0;
 }
 
+int peut_jouer(Joueur *j, Case plateau[TAILLE][TAILLE]) {
+	/*Fonction qui vérifie si le joueur peut jouer son tour : s'il n'est pas entouré de case révélées et de bordures*/
+    int x = j->pos.x;
+    int y = j->pos.y;
+    if (x > 1 && plateau[x - 1][y].revele == 0 && plateau[x - 1][y].correspond > 4)
+        return 1;
+
+    if (x < 5 && plateau[x + 1][y].revele == 0 && plateau[x + 1][y].correspond > 4)
+        return 1;
+	
+    if (y > 1 && plateau[x][y - 1].revele == 0 && plateau[x][y - 1].correspond > 4)
+        return 1;
+
+    if (y < 5 && plateau[x][y + 1].revele == 0 && plateau[x][y + 1].correspond > 4)
+        return 1;
+    return 0;
+}
+
 void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueurs){
     /*Fonction qui fait le tour d'un joueur : affiche le plateau, demande l'arme à choisir, demande la case où aller et en fonction de la valeur de l'élément correspond de la case, vérifie et exécute les différentes options*/
 
@@ -176,7 +194,7 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
     char case_choisie;
     int ligne, colonne, recommencer, teleportation = 0, x, y;
     Coordonnees depart = j->pos;
-    afficher(plateau, joueurs, nb_joueurs);
+    afficher(plateau, joueurs, j, nb_joueurs);
     printf("\nC'est au tour de %s !\n", j->nom);
 	
     do {
@@ -184,57 +202,65 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
         //Demande l'arme à choisir
         do {
             printf("Arme : Bouclier(1), Torche(2), Hache(3), Arc(4) : ");
-            if (scanf("%d", &j->arme) != 1) {
-                printf("Mauvaise saisie. Réessayer.\n");
+            if (scanf("%d", &j->arme) != 1 || j->arme < 1 || j->arme > 4) {
+                printf("Mauvaise saisie arme. Réessayer.\n");
                 while (getchar() != '\n');
+                j->arme = 0;
             }
         } while (j->arme < 1 || j->arme > 4);
 
         /*Demande, s'il n'y a pas eu de téléportation, la prochaine case où aller ; S'il y a eu une téléportation, la case où le joueur s'est téléporté est la case qui va être révélée*/
         x = j->pos.x;
         y = j->pos.y;
+        if(peut_jouer(j, plateau) == 0){
+        	printf("%s ne peut plus jouer ! Il est bloqué.\n", j->nom);
+        	break;
+        }
         if (teleportation == 0) {
             do {
-                printf("Choisir la case où aller : 'h' --> haut ; 'g' --> gauche ; 'b' --> bas ; 'd' --> droite ");
-                scanf(" %c", &case_choisie);
-                printf("\n");
-                if (case_choisie == 'h' && j->pos.x - 1 > 0)
+                printf("Choisir la case où aller : 'h' --> haut ; 'g' --> gauche ; 'b' --> bas ; 'd' --> droite ; '!' --> sortie forcée : ");
+                if (scanf(" %c", &case_choisie) != 1) {
+                	printf("Mauvaise saisie case. Réessayer.\n");
+                	while (getchar() != '\n');
+            	}
+            	
+                if (case_choisie == 'h' && plateau[j->pos.x - 1][j->pos.y].correspond > 4)
                     x--;
-                else if (case_choisie == 'b' && j->pos.x + 1 < 6)
+                else if (case_choisie == 'b' && plateau[j->pos.x + 1][j->pos.y].correspond > 4)
                     x++;
-                else if (case_choisie == 'g' && j->pos.y - 1 > 0)
+                else if (case_choisie == 'g' && plateau[j->pos.x][j->pos.y - 1].correspond > 4)
                     y--;
-                else if (case_choisie == 'd' && j->pos.y + 1 < 6)
+                else if (case_choisie == 'd' && plateau[j->pos.x][j->pos.y + 1].correspond > 4)
                     y++;
-                else
-                    printf("Mauvaise saisie. Réessayer.\n");
-                
+                else if(case_choisie == '!')
+                	exit(0);
+                else{
+                    printf("Mauvaise saisie case. Réessayer.\n");
+                    while (getchar() != '\n');
+                }
                 if (x < 1 || x > 5 || y < 1 || y > 5)
                     printf("Déplacement impossible : sortie du plateau.\n");
             } while ((case_choisie != 'h' && case_choisie != 'g' && case_choisie != 'b' && case_choisie != 'd') || x < 1 || x > 5 || y < 1 || y > 5);
         }
-        teleportation = 0;
-        j->pos.x = x;
-        j->pos.y = y;
-
         //Vérifie que la case choisie n'est pas déjà révélée
-        if (plateau[j->pos.x][j->pos.y].revele == 1) {
+        if (plateau[x][y].revele == 1) {
             printf("Case déjà révélée. Réessayer.\n");
             recommencer = 1;
-            j->pos = depart;
         }
-            
         else {
+        	teleportation = 0;
+        	j->pos.x = x;
+        	j->pos.y = y;
             //Révélation de la case
             plateau[j->pos.x][j->pos.y].revele = 1;
-            afficher(plateau, joueurs, nb_joueurs);
+            afficher(plateau, joueurs, j, nb_joueurs);
             if (plateau[j->pos.x][j->pos.y].correspond <= 8 && plateau[j->pos.x][j->pos.y].correspond >= 5) { //Monstres
                 if (j->arme == plateau[j->pos.x][j->pos.y].correspond - 4) { //Bonne arme
                     printf("Bravo ! %s a battu le monstre ! Vous pouvez continuer votre chemin.\n", j->nom);
                     recommencer = 1;
                 }
                 else { //Mauvaise arme
-                    printf("%s es mort ! Il réapparait à sa position initiale.", j->nom);
+                    printf("%s es mort ! Il réapparait à sa position initiale.\n", j->nom);
                     j->pos = depart;
                 }
             }
