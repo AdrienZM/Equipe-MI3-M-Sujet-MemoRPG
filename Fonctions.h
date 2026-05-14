@@ -10,7 +10,7 @@ int est_gagnant(Joueur j);
 void init_joueur(Joueur* j);
 int peut_jouer(Joueur *j, Case plateau[TAILLE][TAILLE]);
 void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueurs);
-void retourner(Case plateau[TAILLE][TAILLE]);
+void reinitialiser(Case plateau[TAILLE][TAILLE], Joueur *j);
 void sauvegarder(Joueur* joueur_partie, int nb_joueur, char* nom_gagnant);
 char* correspondance(int numero);
 
