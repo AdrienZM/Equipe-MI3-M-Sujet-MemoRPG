@@ -16,7 +16,14 @@ Au moins 1 Coffre au trésor.
 Son Arme Antique personnelle.
 
 **Installation et Compilation**
-**Cloner le dépôt** (ou télécharger les fichiers) :
+### Prérequis
+* Un compilateur C (`gcc`).
+* L'outil `make` (optionnel mais recommandé).
+
+### Compilation
+Utilisez le **Makefile** fourni pour compiler le projet simplement :
+```bash
+make
 
 
 
