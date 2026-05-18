@@ -5,6 +5,11 @@
 
 #define TAILLE 7
 
+void viderBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
 void init(Case plateau[TAILLE][TAILLE], int nb_joueurs) {
 	/*fonction qui initialise le plateau de jeu de 7 x 7 (pas le droit d'être sur la 1ere ligne, 1ere colonne et dernière ligne et dernière colonne) en placant aléatoirement les monstres : basilics (5) ; zombies (6) ; trolls (7) ; harpies (8), les totems (9), les coffres au trésors (10), le portail de téléportation (11) et les 4 armes antiques (12, 13, 14, 15)*/
 
@@ -91,6 +96,101 @@ void init(Case plateau[TAILLE][TAILLE], int nb_joueurs) {
 	}
 }
 
+char* correspondance_affichage(int numero) {
+	/*Fonction qui renvoie un emoji en fonction du numéro passer en entrée*/
+	if (numero < 1 || numero > 15) {
+		printf("Nombre impossible (correspondance).\n");
+		return "???";
+	}
+
+	switch (numero) {
+	
+		case -1 : 
+			return "VIDE";
+		case 1 :
+			return "🧙" ;
+		case 2 :
+			return "🧝" ;
+		case 3 :
+			return "🫅" ;
+		case 4 :
+			return "🧞" ;
+		case 5 :
+			return "🦎" ;
+		case 6 :
+			return "🧟" ;
+		case 7 :
+			return "🧌" ;
+		case 8 :
+			return "🐦" ;
+		case 9 :
+			return "🪄" ;
+		case 10 :
+			return "💰" ;
+		case 11 :
+			return "🌀" ;
+		case 12 :
+			return "🪄" ;
+		case 13 :
+			return "🏹" ;
+		case 14 :
+			return "⚔" ;
+		case 15 :
+			return "🪔" ;
+		default : {
+			printf("Erreur, non affichable");
+			return "???";
+			}
+		}
+}
+char* correspondance_Nom(int numero) {
+	/*Fonction qui renvoie un emoji en fonction du numéro passer en entrée*/
+	if (numero < 1 || numero > 15) {
+		printf("Nombre impossible (correspondance).\n");
+		return "???";
+	}
+
+	switch (numero) {
+	
+		case -1 : 
+			return "VIDE";
+		case 1 :
+			return "Mage" ;
+		case 2 :
+			return "Elfe" ;
+		case 3 :
+			return "Roi" ;
+		case 4 :
+			return "Génie" ;
+		case 5 :
+			return "Basilick" ;
+		case 6 :
+			return "Zombie" ;
+		case 7 :
+			return "Troll" ;
+		case 8 :
+			return "Harpi" ;
+		case 9 :
+			return "Totem" ;
+		case 10 :
+			return "Trésor" ;
+		case 11 :
+			return "Portail" ;
+		case 12 :
+			return "Arme ultime mage" ;
+		case 13 :
+			return "Arme ultime Elef" ;
+		case 14 :
+			return "Arme ultime Roi" ;
+		case 15 :
+			return "Arme ultime Génie" ;
+		default : {
+			printf("Erreur, non affichable");
+			return "???";
+			}
+		}
+}
+
 void afficher(Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueurs) {
 	if (plateau == NULL) {
 		printf("Tableau de départ = NULL (afficher).\n");
@@ -110,7 +210,7 @@ void afficher(Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueurs) {
 	printf("----------Plateau Admin----------\n");
 	for (int i = 0 ; i < TAILLE ; i++) {
 		for (int j = 0 ; j < TAILLE ; j++) {
-			printf("%3d ", plateau[i][j].correspond);
+			printf("%5d", plateau[i][j].correspond);
 		}
 		printf("\n");
 	}
@@ -136,29 +236,31 @@ void afficher(Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueurs) {
 			if (id_joueur != -1) {
 				switch(id_joueur) {
 				case 1:
-					printf("\033[1;31m[P1]\033[0m");
-					break; // Rouge
+					printf(" 🧙  ");
+					break; 
 				case 2:
-					printf("\033[1;32m[P2]\033[0m");
-					break; // Vert
+					printf(" 🧝  ");
+					break; 
 				case 3:
-					printf("\033[1;33m[P3]\033[0m");
-					break; // Jaune
+					printf(" 🫅  ");
+					break; 
 				case 4:
-					printf("\033[1;34m[P4]\033[0m");
-					break; // Bleu
+					printf(" 🧞  ");
+					break; 
 				}
+			
 			}
 
 			//sinon, on affiche le contenu de la case
 			else if (plateau[i][j].revele == 1)
-				printf("\033[0;36m[%2d]\033[0m", plateau[i][j].correspond);
+				printf("\033[0;36m[%s ]\033[0m", correspondance_affichage(plateau[i][j].correspond));
 			else if (i == 0 || i == TAILLE - 1 || j == 0 || j == TAILLE - 1)
 				printf("    ");
 			else
 				printf("\033[0;37m[  ]\033[0m");
 		}
 		printf("\n");
+		
 	}
 }
 
@@ -179,6 +281,7 @@ void init_joueur(Joueur* j) {
 
 	printf("Saisir le nom du joueur (pas d'espaces) : ");
 	scanf("%49s", j->nom);
+	viderBuffer();
 	printf("\n");
 	j->arme = 0;
 	j->arme_antique = 0;
@@ -246,8 +349,9 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
 		recommencer = 0;
 		//Demande l'arme à choisir
 		do {
-			printf("Arme : Bouclier(1), Torche(2), Hache(3), Arc(4) : ");
+			printf("Arme : Bouclier🛡(1), Torche🔥(2), Hache🪓(3), Arc🏹(4) : ");
 			if (scanf("%d", &j->arme) != 1 || j->arme < 1 || j->arme > 4) {
+				viderBuffer();
 				printf("Mauvaise saisie arme. Réessayer.\n");
 				while (getchar() != '\n');
 				j->arme = 0;
@@ -268,6 +372,7 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
 				y = j->pos.y; //si on le fait pas ils peuvent garder les valeurs d'un scanf précédent
 				printf("Choisir la case où aller : 'h' --> haut ; 'g' --> gauche ; 'b' --> bas ; 'd' --> droite ; '!' --> sortie forcée : ");
 				if (scanf(" %c", &case_choisie) != 1) {
+					viderBuffer();
 					printf("Mauvaise saisie case. Réessayer.\n");
 				}
 				while (getchar() != '\n');
@@ -302,7 +407,11 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
 		j->pos.y = y;
 		//Révélation de la case
 		plateau[j->pos.x][j->pos.y].revele = 1;
-		afficher(plateau, joueurs, nb_joueurs);
+		int posJx, posJy;
+		afficher(plateau, joueurs, nb_joueurs );
+		printf("Le Joueurs est actuellement sur : %s", correspondance_Nom(plateau[j->pos.x][j->pos.y].correspond));
+		printf("\n");
+
 		if (plateau[j->pos.x][j->pos.y].correspond <= 8 && plateau[j->pos.x][j->pos.y].correspond >= 5) { //Monstres
 			if (j->arme == plateau[j->pos.x][j->pos.y].correspond - 4) { //Bonne arme
 				printf("Bravo ! %s a battu le monstre ! Vous pouvez continuer votre chemin.\n", j->nom);
@@ -318,6 +427,7 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
 			do {
 				printf("Quelle case cachée veux-tu échanger ? (ligne (1 à 5) colonne (1 à 5)\n");
 				scanf("%d %d", &ligne, &colonne);
+				viderBuffer();
 				if (ligne < 1 || ligne > 5 || (colonne < 1) || colonne > 5)
 					printf("Mauvaise saisie : sortie du plateau.\n");
 				else if (plateau[ligne][colonne].revele == 1)
@@ -343,6 +453,7 @@ void tour(Joueur *j, Case plateau[TAILLE][TAILLE], Joueur *joueurs, int nb_joueu
 			do {
 				printf("Sur quelle case cachée veux-tu te téléporter ? (ligne (1 à 5) colonne (1 à 5)\n");
 				scanf("%d %d", &ligne, &colonne);
+				viderBuffer();
 				if (ligne < 1 || ligne > 5 || (colonne < 1) || colonne > 5)
 					printf("Mauvaise saisie : sortie du plateau.\n");
 				else if (plateau[ligne][colonne].revele == 1)
@@ -418,6 +529,7 @@ void sauvegarder(Joueur* joueurs_partie, int nb_joueurs, char* nom_gagnant) {
 	//on stocke toutes les données des parties précédentes dans un tableau temporaire (historique)
 	if (f != NULL) {
 		while (fscanf(f, "%s %d %d", historique[total_historique].nom, &historique[total_historique].parties, &historique[total_historique].victoires) != EOF) {
+			viderBuffer();
 			total_historique++;
 		}
 		fclose(f);
@@ -458,50 +570,4 @@ void sauvegarder(Joueur* joueurs_partie, int nb_joueurs, char* nom_gagnant) {
 	}
 	fclose(f);
 	printf("\nHistorique mis à jour dans 'Game_History.txt'.\n");
-}
-
-//a MODIFIER
-char* correspondance(int numero) {
-	/*Fonction qui renvoie un emoji en fonction du numéro passer en entrée*/
-	if (numero < 1 || numero > 15) {
-		printf("Nombre impossible (correspondance).\n");
-		return "???";
-	}
-
-	switch (numero) {
-	case 1 :
-		return "test" ;
-	case 2 :
-		return "😁" ;
-	case 3 :
-		return "😁" ;
-	case 4 :
-		return "😁" ;
-	case 5 :
-		return "😁" ;
-	case 6 :
-		return "😁" ;
-	case 7 :
-		return "😁" ;
-	case 8 :
-		return "😁" ;
-	case 9 :
-		return "😁" ;
-	case 10 :
-		return "😁" ;
-	case 11 :
-		return "😁" ;
-	case 12 :
-		return "😁" ;
-	case 13 :
-		return "😁" ;
-	case 14 :
-		return "😁" ;
-	case 15 :
-		return "😁" ;
-	default : {
-		printf("Erreur, non affichable");
-		return "???"
-	    }
-	}
 }
